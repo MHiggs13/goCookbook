@@ -25,7 +25,42 @@ func split(sum int) (x, y int) {
   return    // naked return - returns the named return values (x and y both ints) 
 }
 
+func functionValues(fn func(int, int) int) int {
+  // functions are values too
+  // they can be passed around just like other values
+  // function values may be used as function arguements and return values
+  return fn(10, 10)
+}
+
+func adder() func(int) int {
+    sum := 0
+    return func(x int) int {
+      sum += x
+      return sum
+    }
+}
+
+func functionClosures() {
+  // functions may be closures
+  // closure: function value that references variables from outside its body
+  // the function may access and assign to the referenced variables
+  // in this sense the function is "bound" to the variables
+  pos, neg := adder(), adder()
+  for i := 0; i < 10; i++ {
+    fmt.Println(
+      pos(i),
+      neg(-2*i),
+      )
+  }
+}
+
 func main() {
+  add3 := func(x, y int) int {
+    return x + y
+  }
   fmt.Println(add(52, 13))
+  fmt.Println(functionValues(add3))
+  fmt.Println()
+  functionClosures()
 }
 
