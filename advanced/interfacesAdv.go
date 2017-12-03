@@ -101,6 +101,47 @@ func emptyInterface() {
   describe2(i)
 }
 
+func typeAssertions() {
+  // type assertions provide access to an interface value's underlying concrete value
+  // t := i.(T)
+  // this statement asserts that the interface value i holds the concrete type T and assigns the underlying T value to the variable t
+  // if i does not hold a T, the statement will trigger a panic
+  // to test whether an interface value holds a specific type a type assertion can return two values
+  // the underlying balue and a boolean value that reports whether the assertion succeeded
+  // t, ok := i.(T)
+  // if i holds a T, then t will be the underlying balue and ok will be true
+  // if not, ok will be false and t will be the zero value of type T and no panic occurs
+  // note the similarity between this suntax and that of reading from a map
+  var i interface{} = "hello"
+
+  s := i.(string)
+  fmt.Println(s)
+
+  s, ok := i.(string)
+  fmt.Println(s, ok)
+
+  f, ok := i.(float64)
+  fmt.Println(f, ok)
+
+  //f := i.(float64)  // PANIC
+  //fmt.Println(f)
+}
+
+func typeSwitches(i interface{}) {
+  // type switches are a construct that permits several type assertions in series
+  // a type switch is like a regular switch statement, but the case in a type switch specify types(not values)
+  // those values are compared against the type of the value held by the given interface value
+  // the declaration in a type switch has the same syntax as a type assertion, but the specific type T is replaced with the keyword type
+  switch v := i.(type) {
+    case int:
+      fmt.Printf("Twice %v is %v\n", v, v*2)
+    case string:
+      fmt.Printf("%q is %v bytes long\n", v, len(v))  // variable v is type string
+    default:
+      fmt.Printf("I don't know about type %T!\n", v)
+  }
+}
+
 
 func main() {
   var a1 Abser1
@@ -122,4 +163,8 @@ func main() {
   interfacesImplicit()
   //nilInterface()
   emptyInterface()
+
+  typeAssertions()
+
+  typeSwitches("hello")
 }
